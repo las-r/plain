@@ -26,7 +26,7 @@ class BoolLit(Expr):
     value: bool
 
 @dataclass
-class StringLit(Expr): 
+class StrLit(Expr): 
     value: str
 
 @dataclass
@@ -39,6 +39,10 @@ class BinaryOp(Expr):
     left: Expr
     op: str
     right: Expr
+
+@dataclass
+class Var(Expr):
+    name: str
 
 # statements
 @dataclass

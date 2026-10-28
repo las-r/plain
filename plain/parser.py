@@ -52,7 +52,32 @@ class Parser:
     # parsing functions
     def parseatom(self):
         token = self.advance()
-        pass
+
+        # unary ops
+        if token.value in UNARIES:
+            return UnaryOp(token.value, self.parseatom())
+
+        # literals
+        if token.kind == "INT":
+            return IntLit(int(token.value))
+        if token.kind == "FLOAT":
+            return FloatLit(float(token.value))
+        if token.kind == "BOOL":
+            return BoolLit(token.value == "true")
+        if token.kind == "STR":
+            return StrLit(codecs.escape_decode(bytes(token.value[1:-1], "utf-8"))[0].decode("utf-8"))
+
+        # variable
+        if token.kind == "IDENTIFIER":
+            return Var(token.value)
+
+        # parentheses
+        if token.value == "(":
+            expr = self.parseexpr()
+            self.expect_value(")")
+            return expr
+
+        raise SyntaxError(f"Unexpected token: '{token.value}', {token.kind}")
 
     def parseexpr(self, minprec=0):
         left = self.parseatom()
@@ -71,3 +96,9 @@ class Parser:
     def parsestmt(self):
         token = self.advance()
         pass
+
+    def parse(self):
+        statements = []
+        while self.peek() is not None:
+            statements.append(self.parsestmt())
+        return statements

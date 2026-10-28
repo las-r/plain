@@ -12,9 +12,9 @@ class Token:
 # token pattern
 TOKEN_PATTERN = re.compile(
     r'(?P<COMMENT>//[^\n]*)'
-    r'|(?P<STRING>"(?:\\.|[^"\\])*")'
+    r'|(?P<STR>"(?:\\.|[^"\\])*")'
     r'|(?P<FLOAT>\d+\.\d+)'
-    r'|(?P<INTEGER>\d+)'
+    r'|(?P<INT>\d+)'
     r'|(?P<BOOL>\b(?:true|false)\b)'
     r'|(?P<NIL>\b(?:nil)\b)'
     r'|(?P<TYPE>\b(?:int|float|bool|str)\b)'
