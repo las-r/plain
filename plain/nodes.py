@@ -48,3 +48,14 @@ class Var(Expr):
 @dataclass
 class Stmt(Node): 
     pass
+
+@dataclass
+class VarDecl(Stmt):
+    type_name: str
+    name: str
+    value: Expr
+
+@dataclass
+class VarAssign(Stmt):
+    name: str
+    value: Expr

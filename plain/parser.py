@@ -95,7 +95,19 @@ class Parser:
 
     def parsestmt(self):
         token = self.advance()
-        pass
+
+        # variable definition
+        if token.kind == "TYPE":
+            name = self.expect_kind("IDENTIFIER")
+            self.expect_value("=")
+            value = self.parseexpr()
+            return VarDecl(token.value, name, value)
+
+        # variable assignment
+        if token.kind == "IDENTIFIER":
+            self.expect_value("=")
+            value = self.parseexpr()
+            return VarAssign(token.value, value)
 
     def parse(self):
         statements = []
