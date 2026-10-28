@@ -1,0 +1,46 @@
+from dataclasses import dataclass, field
+from typing import Optional
+
+# plain nodes
+# by las-r
+
+@dataclass
+class Node:
+    pass
+
+# expressions
+@dataclass 
+class Expr(Node): 
+    type: Optional[object] = field(default=None, kw_only=True)
+
+@dataclass
+class IntLit(Expr): 
+    value: int
+
+@dataclass
+class FloatLit(Expr): 
+    value: float
+
+@dataclass
+class BoolLit(Expr): 
+    value: bool
+
+@dataclass
+class StringLit(Expr): 
+    value: str
+
+@dataclass
+class UnaryOp(Expr):
+    op: str
+    value: Expr
+
+@dataclass
+class BinaryOp(Expr):
+    left: Expr
+    op: str
+    right: Expr
+
+# statements
+@dataclass
+class Stmt(Node): 
+    pass
