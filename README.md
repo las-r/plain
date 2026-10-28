@@ -1,2 +1,2 @@
 # Plain
-A compiled programming langauge made with hatred of pointers.
+A compiled programming language made with hatred of pointers.
