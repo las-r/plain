@@ -59,3 +59,14 @@ class VarDecl(Stmt):
 class VarAssign(Stmt):
     name: str
     value: Expr
+
+@dataclass
+class If(Stmt):
+    cond: Expr
+    body: list[Stmt]
+    elsebody: list[Stmt]
+
+@dataclass
+class While(Stmt):
+    cond: Expr
+    body: list[Stmt]

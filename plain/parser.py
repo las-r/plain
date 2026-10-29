@@ -40,18 +40,20 @@ class Parser:
     def expect_kind(self, kind):
         token = self.peek()
         if token is None or token.kind != kind:
-            raise SyntaxError(f"Expected token type {kind}, got {token}")
+            raise SyntaxError(f"Expected token type {kind}, got '{token.value}', {token.kind}")
         return self.advance()
 
     def expect_value(self, value):
         token = self.peek()
         if token is None or token.value != value:
-            raise SyntaxError(f"Expected {value!r}, got {token}")
+            raise SyntaxError(f"Expected {value!r}, got '{token.value}', {token.kind}")
         return self.advance()
 
     # parsing functions
     def parseatom(self):
         token = self.advance()
+        if token is None:
+            raise SyntaxError("Expected expression")
 
         # unary ops
         if token.value in UNARIES:
@@ -95,10 +97,12 @@ class Parser:
 
     def parsestmt(self):
         token = self.advance()
+        if token is None:
+            raise SyntaxError("Expected statement")
 
         # variable definition
         if token.kind == "TYPE":
-            name = self.expect_kind("IDENTIFIER")
+            name = self.expect_kind("IDENTIFIER").value
             self.expect_value("=")
             value = self.parseexpr()
             return VarDecl(token.value, name, value)
@@ -108,6 +112,35 @@ class Parser:
             self.expect_value("=")
             value = self.parseexpr()
             return VarAssign(token.value, value)
+
+        # if
+        if token.value == "if":
+            cond = self.parseexpr()
+            body = []
+            elsebody = []
+            self.expect_value("{")
+            while self.peek() != None and self.peek().value != "}":
+                body.append(self.parsestmt())
+            self.advance()
+            if self.peek() != None and self.peek().value == "else":
+                self.advance()
+                self.expect_value("{")
+                while self.peek().value != "}":
+                    elsebody.append(self.parsestmt())
+                self.advance()
+            return If(cond, body, elsebody)
+
+        # while
+        if token.value == "while":
+            cond = self.parseexpr()
+            body = []
+            self.expect_value("{")
+            while self.peek() != None and self.peek().value != "}":
+                body.append(self.parsestmt())
+            self.advance()
+            return While(cond, body)
+
+        raise SyntaxError(f"Unexpected token: {token.value}")
 
     def parse(self):
         statements = []
