@@ -16,7 +16,6 @@ TOKEN_PATTERN = re.compile(
     r'|(?P<FLOAT>\d+\.\d+)'
     r'|(?P<INT>\d+)'
     r'|(?P<BOOL>\b(?:true|false)\b)'
-    r'|(?P<NIL>\b(?:nil)\b)'
     r'|(?P<TYPE>\b(?:int|float|bool|str)\b)'
     r'|(?P<KEYWORD>\b(?:if|else|while|def|return)\b)'
     r'|(?P<IDENTIFIER>[a-zA-Z_]\w*)'
